@@ -30,3 +30,7 @@ body {
 .dropdown{
     justify-content: left;
 }
+.navbar-nav {
+    display: flex;
+    flex-wrap: wrap;
+}
