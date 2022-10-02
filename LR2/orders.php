@@ -1,15 +1,3 @@
-<?php
-$hostname = "localhost";
-$username = "root";
-$password = "root";
-$databaseName = "orders";
-
-$connect = mysqli_connect($hostname, $username, $password, $databaseName);
-
-$query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId";
-
-$result_table = mysqli_query($connect, $query);
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -46,7 +34,7 @@ $result_table = mysqli_query($connect, $query);
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#" onClick='location.href="index.php"'>
-                            <img src="icon.png" style="max-width: 250px;max-height: 150px;">
+                            <img src="image/icon.png" style="max-width: 250px;max-height: 150px;">
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
                             <span class="navbar-toggler-icon"></span>
@@ -170,6 +158,88 @@ $result_table = mysqli_query($connect, $query);
     </div>
     <div class="container">
         <div class ="row">
+            <span style="text-align: center">Фильтры поиска</span>
+            <span style="text-align: left">По цене</span>
+            <form method="GET" id="search">
+                <input class="form-control" type="number" name="minimum" placeholder="От" value="<?php
+                if (isset($_GET['minimum']))
+                    echo $_GET['minimum'];
+                else echo 0
+                ?>" size="5">
+                <br>
+                <input class="form-control" type="number" name="maximum" placeholder="До" value="<?php
+                if (isset($_GET['maximum']))
+                    echo $_GET['maximum'];
+                else echo 999999
+                ?>" size="5">
+                <br>
+                <span style="text-align: center">По Адресу</span>
+                <br>
+                <input class="form-control" type="text" name="address" placeholder="Адрес" <?php
+                if (isset($_GET['address'])!=' ')
+                    echo $_GET['address'];
+                ?> size="5">
+                <br>
+                <span style="text-align: center">По Имени</span>
+                <br>
+                <input class="form-control" type="text" name="name" placeholder="Имя" <<?php
+                echo $_GET['name'];
+                ?> size="5">
+                <br>
+                <span style="text-align: center">По пояснению</span>
+                <br>
+                <input class="form-control" type="text" name="note" placeholder="Пояснение" <?php
+                if (isset($_GET['note'])!=' ')
+                    echo $_GET['note'];
+                ?> size="5">
+                <br>
+                <input type="submit" form="search" value="Принять">
+                <input type="reset" form="search" onClick='location.href="orders.php"' value="Сбросить">
+            </form>
+            <?php
+                $hostname = "localhost";
+                $username = "root";
+                $password = "root";
+                $databaseName = "orders";
+                $connect = mysqli_connect($hostname, $username, $password, $databaseName);
+
+                $min = 0;
+                $max = 999999;
+                $name = '';
+                $note = '';
+                $address = '';
+
+                if (isset($_GET['minimum']))
+                {
+                    $min = $_GET['minimum'];
+                }
+                if (isset($_GET['maximum']))
+                {
+                    $max = $_GET['maximum'];
+                }
+                $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max'";
+                $result_table = mysqli_query($connect, $query);
+                if (isset($_GET['name']))
+                {
+                    $name = $_GET['name'];
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name'";
+                    $result_table = mysqli_query($connect, $query);
+                }
+               /* if (isset($_GET['note'])!=' ')
+                {
+                    $name = $_GET['note'];
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.orderNote='$note'";
+                    $result_table = mysqli_query($connect, $query);
+                }
+                if (isset($_GET['address'])!=' ')
+                {
+                    $name = $_GET['address'];
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.deliveryAdress='$address'";
+                    $result_table = mysqli_query($connect, $query);
+                }*/
+            ?>
+        </div>
+        <div class="row">
             <div class="col-12">
                 <table class="table table-bordered" id="orders" class="display" style="width: 100%">
                     <thead>
@@ -226,8 +296,8 @@ $result_table = mysqli_query($connect, $query);
                         Статьи
                         <div class="row">
                             <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item" style="background-color: #313131;"><img src="articles1.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Особенности пород древесины</li>
-                                <li class="list-group-item" style="background-color: #313131;"> <img src="articles2.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Мебельный щит и способы его применения</li>
+                                <li class="list-group-item" style="background-color: #313131;"><img src="image/articles1.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Особенности пород древесины</li>
+                                <li class="list-group-item" style="background-color: #313131;"> <img src="image/articles2.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Мебельный щит и способы его применения</li>
                             </ul>
                         </div>
                     </div>
