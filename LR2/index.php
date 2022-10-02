@@ -123,7 +123,7 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-x" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick='location.href="orders.php"'>
+                                        <a class="nav-link dropdown-x" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick='location.href="orders.php?minimum=&maximum=&select_address=all&name=&note="'>
                                             Доставка
                                         </a>
                                     </li>

@@ -1,3 +1,15 @@
+<?php
+    $hostname = "localhost";
+    $username = "root";
+    $password = "root";
+    $databaseName = "orders";
+
+    $connect = mysqli_connect($hostname, $username, $password, $databaseName);
+    $addresses = mysqli_query($connect,"SELECT deliveryAdress FROM transactions");
+
+    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId ORDER BY transactions.invoiceId ASC";
+    $result_table = mysqli_query($connect, $query);
+?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -175,21 +187,29 @@
                 <br>
                 <span style="text-align: center">По Адресу</span>
                 <br>
-                <input class="form-control" type="text" name="address" placeholder="Адрес" <?php
-                if (isset($_GET['address'])!=' ')
-                    echo $_GET['address'];
-                ?> size="5">
+                <select class="select" name="select_address">
+                    <option value="all">Все адреса</option>
+                    <?php
+                        while ($deliveryAddress = mysqli_fetch_array($addresses, MYSQLI_ASSOC))
+                        {
+                            echo "<option value='".$deliveryAddress['deliveryAdress']."'>".$deliveryAddress['deliveryAdress']."</option>";
+                        }
+                    $selected_address = htmlspecialchars(strip_tags(stripslashes(trim($_GET['select_address']))));
+                    ?>
+                </select>
                 <br>
                 <span style="text-align: center">По Имени</span>
                 <br>
-                <input class="form-control" type="text" name="name" placeholder="Имя" <<?php
-                echo $_GET['name'];
-                ?> size="5">
+                <input class="form-control" type="text" name="name" placeholder="Имя" <?php
+                if (isset($_GET['name']))
+                    echo $_GET['name'];
+                else echo ' '
+                ?>" size="5">
                 <br>
                 <span style="text-align: center">По пояснению</span>
                 <br>
                 <input class="form-control" type="text" name="note" placeholder="Пояснение" <?php
-                if (isset($_GET['note'])!=' ')
+                if (isset($_GET['note'])!='')
                     echo $_GET['note'];
                 ?> size="5">
                 <br>
@@ -197,46 +217,64 @@
                 <input type="reset" form="search" onClick='location.href="orders.php"' value="Сбросить">
             </form>
             <?php
-                $hostname = "localhost";
-                $username = "root";
-                $password = "root";
-                $databaseName = "orders";
-                $connect = mysqli_connect($hostname, $username, $password, $databaseName);
-
                 $min = 0;
                 $max = 999999;
                 $name = '';
                 $note = '';
-                $address = '';
 
                 if (isset($_GET['minimum']))
                 {
-                    $min = $_GET['minimum'];
+                    $min =  $_GET['minimum'];
                 }
                 if (isset($_GET['maximum']))
                 {
                     $max = $_GET['maximum'];
                 }
-                $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max'";
+                if (isset($_GET['name']) != '')
+                {
+                    $name = htmlspecialchars(strip_tags(stripslashes(trim($_GET['name']))));
+                }
+                if(isset($_GET['note']) != '')
+                {
+                    $note = htmlspecialchars(strip_tags(stripslashes(trim($_GET['note']))));
+                }
+                if((!empty($name))and(empty($note))and($selected_address="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((!empty($name))and($selected_address!="all")and(empty($note)))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name' and transactions.deliveryAdress = '$selected_address' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((!empty($name))and(!empty($note))and($selected_address="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name' and transactions.orderNote = '$note' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((!empty($name))and(!empty($note))and($selected_address!="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name' and transactions.orderNote = '$note' and transactions.deliveryAdress = '$selected_address' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((!empty($note))and(empty($name))and($selected_address!="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.orderNote = '$note' and transactions.deliveryAdress = '$selected_address' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((!empty($note))and(empty($name))and($selected_address="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.orderNote = '$note' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((empty($note))and(empty($name))and($selected_address!="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.deliveryAdress = '$selected_address' ORDER BY transactions.invoiceId ASC";
+                }
+                elseif((empty($note))and(empty($name))and($selected_address!="all"))
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name' and transactions.orderNote = '$note' and transactions.deliveryAdress = '$selected_address' ORDER BY transactions.invoiceId ASC";
+                }
+                else
+                {
+                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' ORDER BY transactions.invoiceId ASC";
+                }
                 $result_table = mysqli_query($connect, $query);
-                if (isset($_GET['name']))
-                {
-                    $name = $_GET['name'];
-                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and customers.customerName='$name'";
-                    $result_table = mysqli_query($connect, $query);
-                }
-               /* if (isset($_GET['note'])!=' ')
-                {
-                    $name = $_GET['note'];
-                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.orderNote='$note'";
-                    $result_table = mysqli_query($connect, $query);
-                }
-                if (isset($_GET['address'])!=' ')
-                {
-                    $name = $_GET['address'];
-                    $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId WHERE transactions.orderCost >= '$min' and transactions.orderCost < '$max' and transactions.deliveryAdress='$address'";
-                    $result_table = mysqli_query($connect, $query);
-                }*/
             ?>
         </div>
         <div class="row">
@@ -256,7 +294,7 @@
                     <?php while($row1 = mysqli_fetch_array($result_table)):;?>
                         <tr>
                             <td><?php echo $row1[0];?></td>
-                            <td><img src="<?php echo $row1[1];?>" alt="" height=550 width=500></img></td>
+                            <td><img src="image/<?php echo $row1[1];?>" alt="" height=550 width=500></img></td>
                             <td><?php echo $row1[2];?></td>
                             <td><?php echo $row1[3];?></td>
                             <td><?php echo $row1[4];?></td>
