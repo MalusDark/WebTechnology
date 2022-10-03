@@ -34,7 +34,7 @@
                     <nav class="navbar navbar-expand-lg navbar-light bg-light">
                         <div class="container-fluid">
                             <a class="navbar-brand" href="#">
-                                <img src="icon.png" style="max-width: 250px;max-height: 150px;">
+                                <img src="image/icon.png" style="max-width: 250px;max-height: 150px;">
                             </a>
                             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
                                 <span class="navbar-toggler-icon"></span>
@@ -123,7 +123,7 @@
                                         </ul>
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-x" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick='location.href="orders.php?minimum=&maximum=&select_address=all&name=&note="'>
+                                        <a class="nav-link dropdown-x" href="#" id="navbarDropdown5" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick='location.href="orders.php?minimum=0&maximum=999999&select_address=all&name=&note="'>
                                             Доставка
                                         </a>
                                     </li>
@@ -159,7 +159,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="pictures">
-                            <img src="jaf-доска-лиственница.jpg" style="max-width: 60%;max-height: 55%;">
+                            <img src="image/jaf-доска-лиственница.jpg" style="max-width: 60%;max-height: 55%;">
                         </div>
                     </div>
                     <div class="col-lg">
@@ -220,7 +220,7 @@
                         <span class="fs-3">Похожие товары</span>
                         <div class="col-3">
                             <div class="card" style="width: 18rem;">
-                                <img src="JAF-доска-пола-лиственница-300x300.jpg" class="card-img-top" alt="...">
+                                <img src="image/JAF-доска-пола-лиственница-300x300.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <p class="card-text">
                                         Доска пола Лиственница ВС
@@ -235,7 +235,7 @@
                         </div>
                         <div class="col-3">
                             <div class="card" style="width: 18rem;">
-                                <img src="jaf-террасная-доска-лиственница-300x300.jpg" class="card-img-top" alt="...">
+                                <img src="image/jaf-террасная-доска-лиственница-300x300.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <p class="card-text">
                                         Террасная доска Лиственница Прима
@@ -250,7 +250,7 @@
                         </div>
                         <div class="col-3">
                             <div class="card" style="width: 18rem;">
-                                <img src="jaf-доска-ясень-300x300.jpg" class="card-img-top" alt="...">
+                                <img src="image/jaf-доска-ясень-300x300.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <p class="card-text">
                                         Доска ЯСЕНЬ сорт AB, длина от 2000 мм, толщина 30/50 мм
@@ -265,7 +265,7 @@
                         </div>
                         <div class="col-3">
                             <div class="card" style="width: 18rem;">
-                                <img src="jaf-лага-лиственница-300x300.jpg" class="card-img-top" alt="...">
+                                <img src="image/jaf-лага-лиственница-300x300.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <p class="card-text">
                                         Лага лиственница цельностроганая АВ
@@ -309,8 +309,8 @@
                                 Статьи
                                 <div class="row">
                                     <ul class="list-group list-group-horizontal">
-                                        <li class="list-group-item" style="background-color: #313131;"><img src="articles1.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Особенности пород древесины</li>
-                                        <li class="list-group-item" style="background-color: #313131;"> <img src="articles2.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Мебельный щит и способы его применения</li>
+                                        <li class="list-group-item" style="background-color: #313131;"><img src="image/articles1.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Особенности пород древесины</li>
+                                        <li class="list-group-item" style="background-color: #313131;"> <img src="image/articles2.jpg" style="max-width: 150px;max-height: 150px;color:#3A3A3A">Мебельный щит и способы его применения</li>
                                     </ul>
                                 </div>
                             </div>

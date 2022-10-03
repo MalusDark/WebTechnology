@@ -214,7 +214,7 @@
                 ?> size="5">
                 <br>
                 <input type="submit" form="search" value="Принять">
-                <input type="reset" form="search" onClick='location.href="orders.php"' value="Сбросить">
+                <input type="reset" form="search" onClick='location.href="orders.php?minimum=0&maximum=999999&select_address=all&name=&note="' value="Сбросить">
             </form>
             <?php
                 $min = 0;
