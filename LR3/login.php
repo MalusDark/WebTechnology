@@ -21,7 +21,7 @@ if(isset($_POST["login"]))
     {
         $message = "Авторизация прошла успешно";
         setcookie("name", $login);
-        header('Location: login.php');
+        header('Location: index.php');
     }
 }
 else

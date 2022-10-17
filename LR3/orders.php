@@ -159,6 +159,23 @@
                                 <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
                                 <button class="btn btn-outline-success" type="submit">Поиск</button>
                             </form>
+                            <div class="registration">
+                                <?php
+                                if ($_COOKIE["name"]!="")
+                                {
+                                    echo "Вы вошли как ". $_COOKIE["name"] . "<br>";
+                                    echo "<a href='index.php?out=true'>Выйти</a>";
+                                }
+                                else
+                                {
+                                    echo "Вы не авторизованы.";
+                                    echo "<br>";
+                                    echo "<a href='register.php'>Зарегистрироваться</a>";
+                                    echo "<br>";
+                                    echo "<a href='login.php'>Войти</a>";
+                                }
+                                ?>
+                            </div>
                         </div>
                     </div>
                 </nav>

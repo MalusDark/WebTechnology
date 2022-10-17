@@ -7,43 +7,39 @@ $database = "users";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $mysqli = mysqli_connect($server, $username, $password, $database);
 
-if(isset($_POST["register"]))
-{
-    $email=htmlspecialchars(($_POST["email"]));
-    $username=htmlspecialchars(($_POST["userName"]));
-    $password=htmlspecialchars(($_POST["password"]));
-    $birthday_day= strtotime($_POST["birthdayDate"]);
-    $birthday_day=date('Y-m-d H:i:s', $birthday_day);
-    $user_address=htmlspecialchars(($_POST["userAddress"]));
-    $user_inst=htmlspecialchars(($_POST["userInst"]));
-    $gender=$_POST['inlineRadioOptions'];
-    $user_interests=htmlspecialchars(($_POST["interests"]));
-    $query=mysqli_query($mysqli,"SELECT * FROM usersdata WHERE userName='$username'");
-    $numrows=mysqli_num_rows($query);
-    if($numrows==0)
-    {
-        $sql=("INSERT INTO `usersdata` (`email`, `userName`, `password`, `birthdayDate`, `Gender`, `userAddress`, `userInst`, `interests`)
+if(isset($_POST["register"])) {
+    $email = htmlspecialchars(($_POST["email"]));
+    $username = htmlspecialchars(($_POST["userName"]));
+    $accepted_password = htmlspecialchars(($_POST["password_accept"]));
+    $password = htmlspecialchars(($_POST["password"]));
+    $birthday_day = strtotime($_POST["birthdayDate"]);
+    $birthday_day = date('Y-m-d H:i:s', $birthday_day);
+    $user_address = htmlspecialchars(($_POST["userAddress"]));
+    $user_inst = htmlspecialchars(($_POST["userInst"]));
+    $gender = $_POST['inlineRadioOptions'];
+    $user_interests = htmlspecialchars(($_POST["interests"]));
+    $query = mysqli_query($mysqli, "SELECT * FROM usersdata WHERE userName='$username'");
+    $numrows = mysqli_num_rows($query);
+    if ($password == $accepted_password) {
+        if ($numrows == 0) {
+            $sql = ("INSERT INTO `usersdata` (`email`, `userName`, `password`, `birthdayDate`, `Gender`, `userAddress`, `userInst`, `interests`)
             VALUES('$email','$username', '$password', '$birthday_day', '$gender', '$user_address', '$user_inst', '$user_interests')");
-        $result=mysqli_query($mysqli, $sql);
-        if($result)
-        {
-            $message = "Аккаунт успешно создан";
-            setcookie("name", $username);
+            $result = mysqli_query($mysqli, $sql);
+            if ($result) {
+                $message = "Аккаунт успешно создан";
+                setcookie("name", $username);
+                header('Location: index.php');
+            } else {
+                $message = "Неверный формат введенныйх данных";
+            }
+        } else {
+            $message = "Данное имя пользователя уже используется";
         }
-        else
-        {
-            $message = "Неверный формат введенныйх данных";
-        }
-    }
-    else
-    {
-        $message = "Данное имя пользователя уже используется";
+    } else {
+        $message = "Пароли не совпадают";
     }
 }
-else
-{
-    $message = "Заполните обязательные поля";
-}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -288,6 +284,14 @@ else
                                             <div class="form-outline">
                                                 <input required="required" type="password" name="password" class="form-control form-control-lg" />
                                                 <label class="form-label" for="interests">Пароль</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <input required="required" type="password" name="password_accept" class="form-control form-control-lg" />
+                                                <label class="form-label" for="password_accept">Подтверждение пароля</label>
                                             </div>
                                         </div>
                                     </div>
