@@ -1,26 +1,30 @@
 <?php
+session_start();
+error_reporting(0);
 $server = "localhost";
 $username = "root";
 $password = "root";
 $database = "users";
 
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $mysqli = mysqli_connect($server, $username, $password, $database);
 
 if(isset($_POST["login"]))
 {
     $login = htmlspecialchars($_POST['user_login']);
     $user_password = htmlspecialchars(trim($_POST['password']));
-    $query =mysqli_query($mysqli,"SELECT * FROM `usersdata` WHERE `userName`='$login' AND `password`='$user_password'");
+    $hash_user_password =password_hash($user_password,PASSWORD_DEFAULT);
+    $query =mysqli_query($mysqli,"SELECT * FROM `usersdata` WHERE `userName`='$login'");
+    $row = mysqli_fetch_assoc($query);
     $numrows=mysqli_num_rows($query);
     if($numrows==0)
     {
         $message = "Имя пользователя или пароль введены неверно";
     }
     else
+    if(password_verify($user_password, $row['password']))
     {
         $message = "Авторизация прошла успешно";
-        setcookie("name", $login);
+        $_SESSION['user_nem'] = $login;
         header('Location: index.php');
     }
 }
@@ -175,9 +179,9 @@ else
                             </form>
                             <div class="registration">
                                 <?php
-                                if ($_COOKIE["name"]!="")
+                                if ($_SESSION['user_nem'] != "")
                                 {
-                                    echo "Вы вошли как ". $_COOKIE["name"] . "<br>";
+                                    echo "Вы вошли как ". $_SESSION['user_nem'] . "<br>";
                                     echo "<a href='index.php?out=true'>Выйти</a>";
                                 }
                                 else

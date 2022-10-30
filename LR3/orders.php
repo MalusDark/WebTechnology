@@ -1,4 +1,6 @@
 <?php
+    session_start();
+    error_reporting(0);
     $hostname = "localhost";
     $username = "root";
     $password = "root";
@@ -10,7 +12,7 @@
     $query = "SELECT transactions.invoiceId,transactions.invoiceScan,transactions.deliveryAdress,transactions.orderNote,transactions.orderCost,customers.customerName FROM transactions inner join customers ON transactions.customerId = customers.customerId ORDER BY transactions.invoiceId ASC";
     $result_table = mysqli_query($connect, $query);
 
-    if ($_COOKIE["name"]=="")
+    if ($_SESSION['user_nem'] == "")
     {
         header('Location: login.php');
     }
@@ -161,9 +163,9 @@
                             </form>
                             <div class="registration">
                                 <?php
-                                if ($_COOKIE["name"]!="")
+                                if ($_SESSION['user_nem'] != "")
                                 {
-                                    echo "Вы вошли как ". $_COOKIE["name"] . "<br>";
+                                    echo "Вы вошли как ". $_SESSION['user_nem'] . "<br>";
                                     echo "<a href='index.php?out=true'>Выйти</a>";
                                 }
                                 else

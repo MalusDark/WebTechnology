@@ -1,4 +1,6 @@
 <?php
+session_start();
+error_reporting(0);
 $server = "localhost";
 $username = "root";
 $password = "root";
@@ -10,32 +12,39 @@ $mysqli = mysqli_connect($server, $username, $password, $database);
 if(isset($_POST["register"])) {
     $email = htmlspecialchars(($_POST["email"]));
     $username = htmlspecialchars(($_POST["userName"]));
-    $accepted_password = htmlspecialchars(($_POST["password_accept"]));
+    $accepted_password = htmlspecialchars(($_POST['password_accept']));
     $password = htmlspecialchars(($_POST["password"]));
-    $birthday_day = strtotime($_POST["birthdayDate"]);
-    $birthday_day = date('Y-m-d H:i:s', $birthday_day);
+    $hash_password = password_hash($password, PASSWORD_DEFAULT);
+    $birthday_day = date('Y-m-d', strtotime($_POST['birthdayDate']));
     $user_address = htmlspecialchars(($_POST["userAddress"]));
     $user_inst = htmlspecialchars(($_POST["userInst"]));
     $gender = $_POST['inlineRadioOptions'];
     $user_interests = htmlspecialchars(($_POST["interests"]));
-    $query = mysqli_query($mysqli, "SELECT * FROM usersdata WHERE userName='$username'");
+    $query = mysqli_query($mysqli, "SELECT * FROM usersdata WHERE userName='$username' or email='$email'");
     $numrows = mysqli_num_rows($query);
-    if ($password == $accepted_password) {
-        if ($numrows == 0) {
+    if ($password == $accepted_password)
+    {
+        if ($numrows == 0)
+        {
             $sql = ("INSERT INTO `usersdata` (`email`, `userName`, `password`, `birthdayDate`, `Gender`, `userAddress`, `userInst`, `interests`)
-            VALUES('$email','$username', '$password', '$birthday_day', '$gender', '$user_address', '$user_inst', '$user_interests')");
+            VALUES('$email','$username', '$hash_password', '$birthday_day', '$gender', '$user_address', '$user_inst', '$user_interests')");
             $result = mysqli_query($mysqli, $sql);
-            if ($result) {
+            if ($result)
+            {
                 $message = "Аккаунт успешно создан";
-                setcookie("name", $username);
+                $_SESSION['user_nem'] = $username;
                 header('Location: index.php');
             } else {
                 $message = "Неверный формат введенныйх данных";
             }
-        } else {
-            $message = "Данное имя пользователя уже используется";
         }
-    } else {
+        else
+        {
+            $message = "Данное имя пользователя или почта уже используется";
+        }
+    }
+    else
+    {
         $message = "Пароли не совпадают";
     }
 }
@@ -187,9 +196,9 @@ if(isset($_POST["register"])) {
                             </form>
                             <div class="registration">
                                 <?php
-                                if ($_COOKIE["name"]!="")
+                                if ($_SESSION['user_nem'] !="")
                                 {
-                                    echo "Вы вошли как ". $_COOKIE["name"] . "<br>";
+                                    echo "Вы вошли как ". $_SESSION['user_nem'] . "<br>";
                                     echo "<a href='index.php?out=true'>Выйти</a>";
                                 }
                                 else
@@ -241,7 +250,7 @@ if(isset($_POST["register"])) {
                                     <div class="row">
                                         <div class="col-md-6 mb-4 d-flex align-items-center">
                                             <div class="form-outline datepicker w-100">
-                                                <input required="required" type="date" class="form-control form-control-lg" id="birthdayDate" />
+                                                <input required="required" type="date" class="form-control" name="birthdayDate" id="birthdayDate" />
                                                 <label for="birthdayDate" class="form-label">Дата рождения</label>
                                             </div>
                                         </div>

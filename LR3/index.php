@@ -1,8 +1,10 @@
 <?php
+    session_start();
+    error_reporting(0);
     if($_GET["out"] == "true")
     {
-        unset($_COOKIE['name']);
-        setcookie('name', '');
+        $_SESSION['user_nem'] = "";
+        unset($_SESSION['user_nem']);
     }
 ?>
 <!DOCTYPE html>
@@ -151,9 +153,9 @@
                                 </form>
                                 <div class="registration">
                                     <?php
-                                    if ($_COOKIE["name"]!="")
+                                    if ($_SESSION['user_nem'] == " ")
                                     {
-                                        echo "Вы вошли как ". $_COOKIE["name"] . "<br>";
+                                        echo "Вы вошли как ". $_SESSION['user_nem'] . "<br>";
                                         echo "<a href='index.php?out=true'>Выйти</a>";
                                     }
                                     else
