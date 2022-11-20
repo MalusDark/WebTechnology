@@ -44,19 +44,17 @@
 
         if (!empty($items[1])) 
         {
-            ?>
-            <div class="texts-list">
+            $newline = "
+                <div class=\"texts-list\">
                 <h3>Содержание</h3>
-                <ol>
-                    <?php
-                    foreach ($items[1] as $i => $row) 
-                    {
-                        echo '<li><a href="#tag-' . ++$i . '">' . $row . '</a></li>';
-                    }
-                    ?>					
+                <ol>";
+                foreach ($items[1] as $i => $row) 
+                {
+                    $newline = $newline ."<li><a href=\"#tag- ++$i \"> $row </a></li>";
+                }
+            $newline = $newline ."
                 </ol>
-            </div>
-            <?php	
+                </div>";
         }
 
         if (!empty($items[0])) 
@@ -66,6 +64,7 @@
                 $text = str_replace($row, '<a name="tag-' . ++$i . '"></a>' . $row, $text);
             } 
         }
+        $text = $newline . $text;
         return $text;
     }
     function Ex16($text)
