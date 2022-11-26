@@ -3,33 +3,167 @@
 
     function Ex1($text)
     {
-        $count1 = preg_match_all('/<h1(?=(?:[^<>]*)?)>/', $text);
-        $text = preg_replace('/<\/h[1]>/', '', $text, 1);
+        /*$count1 = preg_match_all('/<h1(?=(?:[^<>]*)?)>/', $text);
         for($i=1;$i<=$count1; $i++)
         {
-            if($i<$count1)
+            if($i==1)
             {
-                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<br>'. $i .'.', $text, 1);
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
                 $sometext = substr($text, 0, strpos($text, '<h1>'));
                 $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $sometext);
                 for($j=1;$j<=$count2; $j++)
                 {
-                    $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<br>'. $i .'.'. $j, $text, 1);
-                    $text = preg_replace('/<\/h[2]>/', '', $text, 1);
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j>1 & $i<$count2)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==$count2)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li></ol>', $text, 1);
+                    }
+                }
+                $text = preg_replace('/<\/h[1]>/', '</li>', $text, 1);
+            }
+            if($i>1 and $i<$count1)
+            {
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                $sometext = substr($text, 0, strpos($text, '<h1>'));
+                $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $sometext);
+                for($j=1;$j<=$count2; $j++)
+                {
+                     if($j==1)
+                     {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                     }
+                     if($j>1 & $i<$count2)
+                     {
+                         $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                         $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                     }
+                     if($j==$count2)
+                     {
+                         $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                         $text = preg_replace('/<\/h[2]>/', '</li></ol>', $text, 1);
+                     }
+                }
+                $text = preg_replace('/<\/h[1]>/', '</li>', $text, 1);
+            }
+            if($i==$count1)
+            {
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $text);
+                if($count2 == 0)
+                {
+                     $text = preg_replace('/<\/h[1]>/', '</li></ol>', $text, 1);   
+                }
+                else
+                {
+                    for($j=1;$j<=$count2; $j++)
+                    {
+                        if($j==1)
+                        {
+                            $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                            $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                        }
+                        if($j>1 & $i<$count2)
+                        {
+                            $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                            $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                        }
+                        if($j==$count2)
+                        {
+                            $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                            $text = preg_replace('/<\/h[2]>/', '</li></ol></ol>', $text, 1);
+                        }
+                    }
+                    $text = preg_replace('/<\/h[1]>/', '</li>', $text, 1);
                 }
             }
-            else
+        }*/
+        $count1 = preg_match_all('/<h1(?=(?:[^<>]*)?)>/', $text);
+        for($i=1;$i<=$count1; $i++)
+        {
+            $text = preg_replace('/<\/h[1]>/', '</li>', $text, 1);
+            if($i==1)
             {
-                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<br>'. $i .'.', $text, 1);
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                $sometext = substr($text, 0, strpos($text, '<h1>'));
+                $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $sometext);
+                for($j=1;$j<=$count2; $j++)
+                {
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li></ol>', $text, 1);
+                    }
+                }
+            }
+            if($i>1 and $i < $count1)
+            {
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                $sometext = substr($text, 0, strpos($text, '<h1>'));
+                $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $sometext);
+                for($j=1;$j<=$count2; $j++)
+                {
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li></ol>', $text, 1);
+                    }
+                }
+            }
+            if($i==$count1)
+            {
+                $text = preg_replace('/<h1(?=(?:[^<>]*)?)>/','<li>', $text, 1);
                 $count2 = preg_match_all('/<h2(?=(?:[^<>]*)?)>/', $text);
                 for($j=1;$j<=$count2; $j++)
                 {
-                    $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<br>'. $i .'.'. $j, $text, 1);
-                    $text = preg_replace('/<\/h[2]>/', '', $text, 1);
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<ol><li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li>', $text, 1);
+                    }
+                    if($j==1)
+                    {
+                        $text = preg_replace('/<h2(?=(?:[^<>]*)?)>/','<li>', $text, 1);
+                        $text = preg_replace('/<\/h[2]>/', '</li></ol>', $text, 1);
+                    }
                 }
             }
         }
-        
         return $text;
     }
     function Ex7($text)
@@ -50,7 +184,7 @@
                 <ol>";
                 foreach ($items[1] as $i => $row) 
                 {
-                    $newline = $newline ."<li><a href=\"#tag- ++$i \"> $row </a></li>";
+                    $newline = $newline ."<li><a href=\"#tag-". ++$i. "\"> $row </a></li>";
                 }
             $newline = $newline ."
                 </ol>
@@ -69,7 +203,7 @@
     }
     function Ex16($text)
     {
-        $text = preg_replace(array("/\sпух/i",'/\sрот/','/\sделать/','/\sехать/', '/\sоколо/', '/\sдля/'), array('###','###', '######', '#####', '#####', '###'), $text);
+        $text = preg_replace(array("/\sпух/is",'/\sрот/','/\sделать/','/\sехать/', '/\sоколо/', '/\sдля/'), array('###','###', '######', '#####', '#####', '###'), $text);
         return $text;
     }
     if($_GET["preset"] == "1")
