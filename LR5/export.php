@@ -10,9 +10,9 @@
     
     if($_SERVER['REQUEST_METHOD'] == 'POST') 
     {
-        $path = "http://localhost/LR5/export/";
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/LR5/export/';
         $query = mysqli_query($mysqli, "SELECT * FROM orders_import");
-        $fp = fopen('C:\OpenServer\domains\localhost\LR5\export\orders_export.csv', 'w');
+        $fp = fopen($path.'orders_export.csv', 'w');
         
         $head = array(invoiceId, invoiceScan, deliveryAdress, orderNote, orderCost, customerId);
         fputcsv($fp,$head);

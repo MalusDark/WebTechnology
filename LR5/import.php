@@ -31,6 +31,12 @@
                 while (($row = fgetcsv($fh, ',')) !== false) 
                 {
                     list($invoiceId, $invoiceScan, $deliveryAdress, $orderNote, $orderCost, $customerId) = $row;
+                    settype($invoiceId,'integer');
+                    $invoiceScan = mysqli_real_escape_string($mysqli,$invoiceScan);
+                    $deliveryAdress = mysqli_real_escape_string($mysqli,$deliveryAdress);
+                    $orderNote = mysqli_real_escape_string($mysqli,$orderNote);
+                    settype($orderCost,'double'); 
+                    settype($customerId,'integer');
                     $query = mysqli_query($mysqli, "INSERT INTO `$file` VALUES('$invoiceId','$invoiceScan','$deliveryAdress', '$orderNote','$orderCost','$customerId');");
                     $count_row++;
                 }
