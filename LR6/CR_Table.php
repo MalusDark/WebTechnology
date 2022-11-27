@@ -1,16 +1,24 @@
 <?php
     session_start();
-    
+
+    $hostname = "localhost";
+    $username = "root";
+    $password = "root";
+    $databaseName = "orders";
+    $connect = mysqli_connect($hostname, $username, $password, $databaseName);
+    $usersid = mysqli_query($connect,"SELECT customerId FROM customers");
+    $arrayid = array();
+
     if(isset($_POST["add"])) 
     {
-        $deliveryAdress=htmlspecialchars(($_POST["Addres"]));
-        $orderNote=htmlspecialchars(($_POST["Note"]));
+        $deliveryAdress=htmlspecialchars(strip_tags($_POST["Addres"]));
+        $orderNote=htmlspecialchars(strip_tags($_POST["Note"]));
         $orderCost=doubleval(htmlspecialchars(($_POST["Cost"])));
-        $customerId=htmlspecialchars(($_POST["nameFF"]));
+        $customerId=htmlspecialchars(($_POST['select_id']));
                 
         if(isset($_FILES) && $_FILES['fileFF']['error'] == 0)
         {
-            $uploaddir = 'C:\OpenServer\domains\localhost\LR6\image\\';
+            $uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/LR6/image/';
             $uploadfile = $uploaddir . basename($_FILES['fileFF']['name']);
             $tmp_name = $_FILES["fileFF"]["tmp_name"];
             $name = basename($_FILES["fileFF"]["name"]);
@@ -106,15 +114,23 @@
             <form enctype="multipart/form-data" method="post" id="feedback-form">
                 <label for="fileFF">Прикрепить Скан:</label>
                 <br>
-                <input type="file" name="fileFF" multiple id="fileFF" style="width:280px">
+                <input required="required" type="file" name="fileFF" multiple id="fileFF" style="width:280px">
                 <label for="Address">Адрес:</label>
-                <input type="text" name="Addres" id="Address" style="width:120px">
+                <input required="required" type="text" name="Addres" id="Address" style="width:120px">
                 <label for="Note">Пояснение:</label>
                 <textarea name="Note" id="messageFF" required rows="5" placeholder="Детали заявки…" style="width:120px"></textarea>
                 <label for="Cost">Цена:</label>
-                <input type="number" name="Cost" id="Costt" style="width:120px">
-                <label for="nameFF">Айди пользователя:</label>
-                <input type="number" name="nameFF" id="nameFF" x-autocompletetype="name" style="width:120px">
+                <input required="required" type="number" name="Cost" id="Costt" style="width:120px">
+                <label for="nameFF">Пользователь:</label>
+                <select class="select" name="select_id">
+                    <?php
+                        while ($row = mysqli_fetch_array($usersid))
+                        {
+                            echo "<option value='".$row['customerId']."'>".$row['customerId']."</option>";
+                        }
+                        $selected_id = htmlspecialchars(strip_tags(stripslashes(trim($_GET['select_id']))));
+                    ?>
+                </select>
                 <br>
                 <input name="add" value="Добавить" type="submit" id="submitFF">
             </form>
