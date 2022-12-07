@@ -6,7 +6,7 @@
     $password = "root";
     $databaseName = "orders";
     $connect = mysqli_connect($hostname, $username, $password, $databaseName);
-    $usersid = mysqli_query($connect,"SELECT customerId FROM customers");
+    $usersid = mysqli_query($connect,"SELECT customerName, customerId FROM customers");
     $arrayid = array();
 
     if(isset($_POST["add"])) 
@@ -14,22 +14,29 @@
         $deliveryAdress=htmlspecialchars(strip_tags($_POST["Addres"]));
         $orderNote=htmlspecialchars(strip_tags($_POST["Note"]));
         $orderCost=doubleval(htmlspecialchars(($_POST["Cost"])));
-        $customerId=htmlspecialchars(($_POST['select_id']));
-                
-        if(isset($_FILES) && $_FILES['fileFF']['error'] == 0)
+        if($orderCost<0.0)
         {
-            $uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/LR6/image/';
-            $uploadfile = $uploaddir . basename($_FILES['fileFF']['name']);
-            $tmp_name = $_FILES["fileFF"]["tmp_name"];
-            $name = basename($_FILES["fileFF"]["name"]);
-            move_uploaded_file($tmp_name, "$uploaddir/$name"); 
-            $invoiceScan=htmlspecialchars($_FILES["fileFF"]["name"]);
-            $message ='Файл успешно загружен';
-            UserTable::add($invoiceScan,$deliveryAdress,$orderNote,$orderCost,$customerId);
+            $message = 'Цена указана неверно';
         }
         else
         {
-            $message = 'Ошибка загрузки файла';
+            $customerId=htmlspecialchars(($_POST['select_id']));
+                
+            if(isset($_FILES) && $_FILES['fileFF']['error'] == 0)
+            {
+                $uploaddir = $_SERVER['DOCUMENT_ROOT'] . '/LR6/image/';
+                $uploadfile = $uploaddir . basename($_FILES['fileFF']['name']);
+                $tmp_name = $_FILES["fileFF"]["tmp_name"];
+                $name = basename($_FILES["fileFF"]["name"]);
+                move_uploaded_file($tmp_name, "$uploaddir/$name"); 
+                $invoiceScan=htmlspecialchars($_FILES["fileFF"]["name"]);
+                $message ='Файл успешно загружен';
+                UserTable::add($invoiceScan,$deliveryAdress,$orderNote,$orderCost,$customerId);
+            }
+            else
+            {
+                $message = 'Ошибка загрузки файла';
+            }
         }
     }
     class UserTable 
@@ -126,7 +133,7 @@
                     <?php
                         while ($row = mysqli_fetch_array($usersid))
                         {
-                            echo "<option value='".$row['customerId']."'>".$row['customerId']."</option>";
+                            echo "<option value='".$row['customerId']."'>".$row['customerName']."</option>";
                         }
                         $selected_id = htmlspecialchars(strip_tags(stripslashes(trim($_GET['select_id']))));
                     ?>

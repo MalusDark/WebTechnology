@@ -1,5 +1,6 @@
 <?php
     session_start();
+    error_reporting(0);
 
     function check_file_exists_here($url)
     {
